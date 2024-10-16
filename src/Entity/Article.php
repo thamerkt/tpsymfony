@@ -25,6 +25,9 @@ class Article
     #[Assert\GreaterThan(0)] // Ensure the price is greater than 0
     private ?string $prix = null;
 
+    #[ORM\ManyToOne(inversedBy: 'articles')]
+    private ?Category $category = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -50,6 +53,18 @@ class Article
     public function setPrix(string $prix): static
     {
         $this->prix = $prix;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }

@@ -22,5 +22,8 @@ delete_article:
     path: /article/delete/{id}
     controller: App\Controller\IndexController::delete
     methods: [DELETE,GET]
-
+new_category:
+    path: /category/newCat
+    controller: App\Controller\IndexController::delete
+    methods: [POST,GET]
 

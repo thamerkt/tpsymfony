@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\Category;
 use App\Form\ArticleType;
+use App\Form\CategoryType;
 use Doctrine\DBAL\Types\TextType;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -98,6 +100,22 @@ public function delete(Request $request, $id, EntityManagerInterface $entityMana
     $response = new Response();
     $response->send();
     return $this->redirectToRoute('article_list');
+    }
+    /**
+ * @Route("/category/newCat", name="new_category")
+ * Method({"GET", "POST"})
+ */
+ public function newCategory(Request $request,EntityManagerInterface $entityManager) {
+    $category = new Category();
+    $form = $this->createForm(CategoryType::class,$category);
+    $form->handleRequest($request);
+    if($form->isSubmitted() && $form->isValid()) {
+    $article = $form->getData();
+    $entityManager->persist($category);
+    $entityManager->flush();
+    }
+   return $this->render('articles/newCategory.html.twig',['form'=>
+   $form->createView()]);
     }
     }
 
