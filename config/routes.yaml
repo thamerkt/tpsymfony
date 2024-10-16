@@ -16,7 +16,7 @@ article_show:
     path: /article/{id}
     controller: App\Controller\IndexController::show
 edit_article:
-    path: /article/{id}
+    path: /article/edit/{id}
     controller: App\Controller\IndexController::edit
 delete_article:
     path: /article/delete/{id}
@@ -24,6 +24,15 @@ delete_article:
     methods: [DELETE,GET]
 new_category:
     path: /category/newCat
-    controller: App\Controller\IndexController::delete
+    controller: App\Controller\IndexController::newCategory
     methods: [POST,GET]
+article_par_cat:
+    path: /art_cat/
+    controller: App\Controller\IndexController::articlesParCategorie
+    methods: [POST,GET]
+article_par_prix:
+    path: /art_prix
+    controller: App\Controller\IndexController::articlesParPrix
+    methods: [POST,GET]
+
 
