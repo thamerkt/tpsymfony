@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Form\ArticleType;
 use Doctrine\DBAL\Types\TextType;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -43,24 +44,15 @@ return $this->render('articles/index.html.twig',['articles'=> $articles]);
  */
  public function new(Request $request,EntityManagerInterface $entityManager) {
     $article = new Article();
-    $form = $this->createFormBuilder($article)
-    ->add('nom', TypeTextType::class)
-    ->add('prix', TypeTextType::class)
-    ->add('save', SubmitType::class, array('label' => 'Créer'))->getForm();
-    
-    
-    $form->handleRequest($request);
-    
-    if($form->isSubmitted() && $form->isValid()) {
-    $article = $form->getData();
-    
-    
-    $entityManager->persist($article);
-    $entityManager->flush();
-    
-    return $this->redirectToRoute('article_list');
-    }
-    return $this->render('articles/new.html.twig',['form' => $form->createView()]);
+ $form = $this->createForm(ArticleType::class,$article);
+ $form->handleRequest($request);
+ if($form->isSubmitted() && $form->isValid()) {
+ $article = $form->getData();
+ $entityManager->persist($article);
+ $entityManager->flush();
+ return $this->redirectToRoute('article_list');
+ }
+ return $this->render('articles/new.html.twig',['form' => $form->createView()]);
     }
     /**
  * @Route("/article/{id}", name="article_show")
@@ -76,24 +68,21 @@ return $this->render('articles/index.html.twig',['articles'=> $articles]);
  */
  public function edit(Request $request, $id,EntityManagerInterface $entityManager) {
     $article = new Article();
-    $article = $entityManager->getRepository(Article::class)->find($id);
-    
-    $form = $this->createFormBuilder($article)
-    ->add('nom', TextType::class)
-    ->add('prix', TextType::class)
-    ->add('save', SubmitType::class, array(
-    'label' => 'Modifier' 
-    ))->getForm();
-    
-    $form->handleRequest($request);
-    if($form->isSubmitted() && $form->isValid()) {
-    
-    
-    $entityManager->flush();
-    
-    return $this->redirectToRoute('article_list');
-    }
-    return $this->render('articles/edit.html.twig', ['form' => $form->createView()]);
+$article = $entityManager->getRepository(Article::class)->find($id);
+ 
+ $form = $this->createForm(ArticleType::class,$article);
+ 
+ $form->handleRequest($request);
+ if($form->isSubmitted() && $form->isValid()) {
+ 
+
+ $entityManager->flush();
+ 
+ return $this->redirectToRoute('article_list');
+ }
+ 
+ return $this->render('articles/edit.html.twig', ['form' =>
+$form->createView()]);
  }
  /**
  * @Route("/article/delete/{id}",name="delete_article")
